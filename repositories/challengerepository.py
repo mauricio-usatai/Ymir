@@ -1,22 +1,26 @@
+import os
 import json
-from helpers import pick_rand
+import random
 
 from config.challenges import *
 
 class ChallengeRepository:
-    def get_random(self, n):
+    def __init__(self, challenges_file=CHALLENGES_FILE):
+        self.challenges_file = os.path.join('data', challenges_file)
+
+    def get_random_sample(self, n):
         try:
-            with open(CHALLENGES_FILE, 'r') as file:
+            with open(self.challenges_file, 'r') as file:
                 challenges = json.loads(file.read())
-                picked = pick_rand(challenges, n)
-                return picked 
+                picked_index = random.sample(challenges.keys(), n)
+                return {i: challenges[i] for i in picked_index}
         except Exception as e:
             raise Exception(str(e))
 
     def get_by_id_list(self, ids):
         if len(ids) > 0:
             try:
-                with open(CHALLENGES_FILE, 'r') as file:
+                with open(self.challenges_file, 'r') as file:
                     challenges = json.loads(file.read())
                     challenges = { _id: challenges[_id] for _id in ids}  
                     return challenges

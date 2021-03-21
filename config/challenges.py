@@ -1,3 +1,4 @@
-CHALLENGES_NUM = 4
-CHALLENGES_FILE = '/Users/musatai/Code/Shenanigans/python/ymir/data/challenges.json'
-TIME_HISTORY_FILE = '/Users/musatai/Code/Shenanigans/python/ymir/data/history.json'
+CHALLENGES_NUM = 3
+
+CHALLENGES_FILE = 'challenges.json'
+TIME_HISTORY_FILE = 'history.json'

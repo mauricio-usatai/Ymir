@@ -1,13 +1,14 @@
 from repositories import ChallengeRepository
-from solutions import *
+from solutions import SolutionFactory
 from config.challenges import *
 
 class ChallengeService:
     def __init__(self):
         self.repo = ChallengeRepository()
+        self._factory = SolutionFactory()
 
     def get_rand(self):
-        challenges_dict = self.repo.get_random(CHALLENGES_NUM)
+        challenges_dict = self.repo.get_random_sample(CHALLENGES_NUM)
         for value in challenges_dict.values():
             del value['function']
         
@@ -22,15 +23,10 @@ class ChallengeService:
         for _id in ids:
             results[_id] = []
             for _input, submited_answer in zip(challenges[_id]['inputs'], answers[_id]):
-                # Call answer functions
+                # Call solution classes
                 correct_answer = None
-                if isinstance(_input, str):
-                    correct_answer = eval(f"{challenges[_id]['function']}('{_input}')")
-                else:
-                    correct_answer = eval(f"{challenges[_id]['function']}({_input})")
+                solution = self._factory.create(challenges[_id]['function'])
+                correct_answer = solution.apply(_input)
 
-                if submited_answer == correct_answer:
-                    results[_id].append(True)
-                else:
-                    results[_id].append(False)
+                results[_id].append(True if submited_answer == correct_answer else False)
         return results

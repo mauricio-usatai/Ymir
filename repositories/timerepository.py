@@ -3,9 +3,12 @@ import os
 from config.challenges import *
 
 class TimeRepository:
+    def __init__(self, history_file=TIME_HISTORY_FILE):
+        self.history_file = os.path.join('data', history_file)
+
     def get_history(self):
         try:
-            with open(TIME_HISTORY_FILE, 'r') as file:
+            with open(self.history_file, 'r') as file:
                 history = json.loads(file.read())
                 return history
         except Exception as e:
@@ -13,8 +16,8 @@ class TimeRepository:
 
     def append(self, entry):
         try:
-            if os.path.exists(TIME_HISTORY_FILE):
-                file = open(TIME_HISTORY_FILE, 'r+')
+            if os.path.exists(self.history_file):
+                file = open(self.history_file, 'r+')
                 contents = file.read()
                 file.seek(0)
             
